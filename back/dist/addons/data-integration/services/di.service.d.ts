@@ -1,0 +1,30 @@
+import { FrecuenciaInstanceI } from '../models/frecuencia.schema';
+import { LoginInstanceI } from '../models/login.schema';
+import { Model } from 'mongoose';
+import { SchedulerRegistry } from '@nestjs/schedule';
+export declare class DiService {
+    private schedulelerRegistry;
+    private frequencyModel;
+    private loginModel;
+    private readonly logger;
+    constructor(schedulelerRegistry: SchedulerRegistry, frequencyModel: Model<FrecuenciaInstanceI>, loginModel: Model<LoginInstanceI>);
+    path_ktr_trabaja: string;
+    path_ktr_client: string;
+    findAll(orderByDate?: boolean): Promise<FrecuenciaInstanceI[]>;
+    findRecord(id: string): Promise<FrecuenciaInstanceI>;
+    modifyRecord(name_job: string, frecuencia: FrecuenciaInstanceI): Promise<FrecuenciaInstanceI>;
+    createFrecuency(data_frecuency: any): Promise<FrecuenciaInstanceI>;
+    updateFrecuency(data_frecuency: any): Promise<FrecuenciaInstanceI>;
+    listAllJobTemplate(): Promise<any[]>;
+    listAllJobClientDetailed(data: any): Promise<any>;
+    updateJob(data: any): Promise<void>;
+    deleteJob(data: any): void;
+    copiFolderContent(data_folder: any): void;
+    searchOneLogDB(data: any): Promise<any>;
+    findAllLogs(): Promise<any>;
+    findAllHistory(log_data: any): Promise<any>;
+    launchJob(client: string, job: string): void;
+    actionSpecificCron(interface_select: any, action: any): Promise<void>;
+    registrarse(user_data: any): Promise<LoginInstanceI>;
+    login(user_data: any): Promise<any>;
+}

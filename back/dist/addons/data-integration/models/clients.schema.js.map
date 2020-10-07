@@ -1,0 +1,1 @@
+{"version":3,"file":"clients.schema.js","sourceRoot":"","sources":["../../../../src/addons/data-integration/models/clients.schema.ts"],"names":[],"mappings":";;AAAA,qCAAqC;AAGxB,QAAA,oBAAoB,GAAG,IAAI,QAAQ,CAAC,MAAM,CAAC;IACpD,IAAI,EAAE,MAAM;IACZ,IAAI,EAAE,CAAC;YACH,IAAI,EAAE,MAAM;SACf,CAAC;CACL,CAAC,CAAC"}
