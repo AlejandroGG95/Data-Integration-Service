@@ -1,0 +1,31 @@
+<button nz-button nzType="primary" (click)="showModal()">
+    <span>Create New</span>
+</button>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Create new interface" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading">
+    <p optionalHelp="Model identifier for user">Select new interface</p>
+    <nz-select [(ngModel)]="selected" style="width: 300px;" [nzSize]="'large'" nzPlaceHolder="Choose">
+        <nz-option *ngFor="let option of selectedOption" [nzValue]="option" [nzLabel]="option"></nz-option>
+    </nz-select>
+    <hr>
+    <p optionalHelp="Model identifier for user">Name </p>
+    <input nz-input placeholder="Name" style="width: 150px;" [(ngModel)]="name" />
+
+    <!-- (ngSubmit)="submitForm()" -->
+    <!-- <form nz-form [formGroup]="validateForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzFor="Select" nzRequired>Select</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please select one!">
+                <nz-select [(ngModel)]="selected" nzPlaceHolder="Choose" id="Select" formControlName="Select">
+                    <nz-option *ngFor="let option of selectedOption" [nzValue]="option" [nzLabel]="option"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired nzFor="name">Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please input name!">
+                <input nz-input placeholder="Name" style="width: 150px;" [(ngModel)]="name" />
+            </nz-form-control>
+        </nz-form-item>
+    </form> -->
+</nz-modal>

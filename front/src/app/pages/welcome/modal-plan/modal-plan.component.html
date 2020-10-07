@@ -1,0 +1,122 @@
+<div *ngIf="dataPlan.frecuencia == null">
+    <a (click)="showModal()">Schedule</a>
+</div>
+<div *ngIf="dataPlan.frecuencia != null">
+    <i nz-icon nzType="edit" nzTheme="outline" (click)="showModal()"></i>
+    <i nz-icon nzType="delete" nzTheme="outline" (click)="submitForm('delete')"></i>
+</div>
+
+<nz-modal #basicData [(nzVisible)]="isVisible" nzTitle="Scheduling" (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk('create')" [nzOkLoading]="isOkLoading">
+
+    <nz-select [(ngModel)]="periodicityType">
+        <nz-option nzValue="less than daily" nzLabel="less than daily"></nz-option>
+        <nz-option nzValue="daily or more" nzLabel="daily or more"></nz-option>
+    </nz-select>
+
+    <ng-container *ngIf="periodicityType === 'less than daily'; else other">
+        <p nz-typography>Hours frequency</p>
+        <nz-select [(ngModel)]="hourType">
+            <nz-option nzValue="each one" nzLabel="each one"></nz-option>
+            <nz-option nzValue="at" nzLabel="at"></nz-option>
+            <nz-option nzValue="from" nzLabel="from"></nz-option>
+            <nz-option nzValue="every" nzLabel="every"></nz-option>
+            <nz-option nzValue="specific" nzLabel="specific"></nz-option>
+        </nz-select>
+
+        <span *ngIf="hourType === 'at'">
+            <nz-time-picker [(ngModel)]="hourFromStart" nzFormat="HH"></nz-time-picker>
+        </span>
+
+        <span *ngIf="hourType === 'from'">
+            <nz-time-picker [(ngModel)]="hourFromStart" nzFormat="HH"></nz-time-picker>
+            <p style="display:inline">to</p>
+            <nz-time-picker [(ngModel)]="hourFromEnd" nzFormat="HH"></nz-time-picker>
+        </span>
+
+        <span *ngIf="hourType === 'every'">
+            <nz-input-number [(ngModel)]="hourEvery" [nzMin]="1" [nzStep]="1"></nz-input-number>
+        </span>
+
+        <div *ngIf="hourType === 'specific'">
+            <ng-container *ngFor="let hour of keys(hourBoolean)">
+                <nz-tag nz-tooltip [nzTooltipTitle]="hour" nzTooltipPlacement="bottom" nzMode="checkable"
+                    [nzChecked]="hourBoolean[hour]" (nzCheckedChange)="checkChangeHour($event, hour)">{{hour}}</nz-tag>
+            </ng-container>
+        </div>
+
+        <p nz-typography>Minutes frequency</p>
+        <nz-select [(ngModel)]="minuteType">
+            <nz-option nzValue="each one" nzLabel="each one"></nz-option>
+            <nz-option nzValue="at" nzLabel="at"></nz-option>
+            <nz-option nzValue="from" nzLabel="from"></nz-option>
+            <nz-option nzValue="every" nzLabel="every"></nz-option>
+        </nz-select>
+
+        <span *ngIf="minuteType === 'at'">
+            <nz-time-picker [(ngModel)]="minuteFromStart" nzFormat="mm"></nz-time-picker>
+        </span>
+
+        <span *ngIf="minuteType === 'from'">
+            <nz-time-picker [(ngModel)]="minuteFromStart" nzFormat="mm"></nz-time-picker>
+            <p style="display:inline">to</p>
+            <nz-time-picker [(ngModel)]="minuteFromEnd" nzFormat="mm"></nz-time-picker>
+        </span>
+
+        <span *ngIf="minuteType === 'every'">
+            <nz-input-number [(ngModel)]="minuteEvery" [nzMin]="1" [nzStep]="1"></nz-input-number>
+        </span>
+    </ng-container>
+
+    <ng-template #other>
+        <h4 nz-typography>Starting date</h4>
+        <nz-date-picker [(ngModel)]="date" nzFormat="dd/MM/yyyy"></nz-date-picker>
+        <nz-time-picker [(ngModel)]="time " nzFormat="HH:mm "></nz-time-picker>
+        <br />
+        <br />
+        <h4 nz-typography>Frenquency</h4>
+
+        <span>
+            <p style="display:inline">Repeat every</p>
+            <nz-input-number [(ngModel)]="plan.time_n" [nzMin]="1" [nzStep]="1"></nz-input-number>
+        </span>
+        <nz-select [(ngModel)]="plan.time_u">
+            <nz-option nzValue="day" nzLabel="day"></nz-option>
+            <nz-option nzValue="week" nzLabel="week"></nz-option>
+            <nz-option nzValue="month" nzLabel="month"></nz-option>
+            <nz-option nzValue="year" nzLabel="year"></nz-option>
+        </nz-select>
+        <br />
+        <div *ngIf="plan.time_u === 'week' ">
+            <p>Repeat On</p>
+            <ng-container *ngFor="let day of keys(weekBoolean)">
+                <nz-tag nz-tooltip [nzTooltipTitle]="day" nzTooltipPlacement="bottom" nzMode="checkable"
+                    [nzChecked]="weekBoolean[day]" (nzCheckedChange)="checkChangeWeek($event, day)">{{day[0]}}</nz-tag>
+            </ng-container>
+        </div>
+    </ng-template>
+    <!-- <h4 nz-typography>Starting date</h4>
+    <nz-date-picker [(ngModel)]="date" nzFormat="dd/MM/yyyy"></nz-date-picker>
+    <nz-time-picker [(ngModel)]="time " nzFormat="HH:mm "></nz-time-picker>
+    <br />
+    <br />
+    <h4 nz-typography>Frenquency</h4>
+    <p style="display:inline">Repeat every</p>
+    <nz-input-number [(ngModel)]="plan.time_n" [nzMin]="1" [nzStep]="1"></nz-input-number>
+    <nz-select [(ngModel)]="plan.time_u">
+        <nz-option nzValue="day" nzLabel="day"></nz-option>
+        <nz-option nzValue="week" nzLabel="week"></nz-option>
+        <nz-option nzValue="month" nzLabel="month"></nz-option>
+        <nz-option nzValue="year" nzLabel="year"></nz-option>
+    </nz-select>
+    <br />
+    <div *ngIf="plan.time_u === 'week'">
+        <p>Repeat On</p>
+        <ng-container *ngFor="let day of keys(weekBoolean)">
+            <nz-tag nz-tooltip [nzTooltipTitle]="day" nzTooltipPlacement="bottom" nzMode="checkable"
+                [nzChecked]="weekBoolean[day]" (nzCheckedChange)="checkChange($event, day)">{{day[0]}}</nz-tag>
+        </ng-container>
+    </div> -->
+
+
+</nz-modal>

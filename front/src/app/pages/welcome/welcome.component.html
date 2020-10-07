@@ -1,0 +1,98 @@
+<!-- BOTONES -->
+<div>
+    <app-modal-create (eventoC)="reloadTable()"></app-modal-create>
+    <button nz-button nzType=" primary " (click)="refreshButton($event)"><i nz-icon nzType="sync"
+            nzTheme="outline"></i></button>
+</div>
+
+<nz-table #basicTable [nzData]="listData" (nzCheckedChange)="listData">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Next at</th>
+            <th>Each</th>
+            <th>Modified date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td [nzChecked]="setOfCheckedId.has(data.name)" [nzDisabled]="false"
+                (nzCheckedChange)="onItemChecked(data.name, $event) "></td>
+            <td>{{data.name}}</td>
+            <td>{{data.description}}</td>
+            <td>
+                <div *ngIf="data.next_ == null">
+                    <ng-container *ngIf="data.frecuencia == null; else other">
+                        <app-modal-plan [dataPlan]="data " (someEvent)="refresh($event)"></app-modal-plan>
+                    </ng-container>
+                    <ng-template #other>
+                        Continuosly
+                        <app-modal-plan [dataPlan]="data" (someEvent)="refresh($event)"></app-modal-plan>
+                    </ng-template>
+                </div>
+                <div *ngIf="data.next_ != null">
+                    {{ data.next_ }}
+                    <br />
+                    <app-modal-plan [dataPlan]="data " (someEvent)="refresh($event)"></app-modal-plan>
+                </div>
+            </td>
+            <td>
+                <div *ngIf="data.frecuencia == null">
+                    Not Scheduled
+                </div>
+                <div *ngIf="data.frecuencia != null">
+                    <ng-container *ngIf="data.frecuencia.time_u == 'hours-minutes'; else week">
+                        {{ cronFormatUtil(data.frecuencia.time_data.hourType, data.frecuencia.time_data.minuteType, data.frecuencia.time_data.hours, data.frecuencia.time_data.minutes)}}
+                    </ng-container>
+                    <ng-template #week>
+                        <ng-container *ngIf="data.frecuencia.time_u == 'week'; else other">
+                            <p style="color: #0066CC;" nz-tooltip nzTooltipPlacement="bottom"
+                                [nzTooltipTitle]="data.frecuencia.time_data.repeat_on">
+                                {{ data.frecuencia.time_n + " " +data.frecuencia.time_u}}</p>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #other>
+                        {{ data.frecuencia.time_n + " " +data.frecuencia.time_u}}
+                    </ng-template>
+                </div>
+            </td>
+            <td>{{data.modified_date}}</td>
+            <td>
+                <nz-badge nzStatus="processing" nzText="Running" *ngIf="checkStatus(data.name) == 'running'"></nz-badge>
+                <nz-badge nzStatus="success" nzText="Success" *ngIf="checkStatus(data.name) === 'end'"></nz-badge>
+                <nz-badge nzStatus="warning" nzText="Stopped" *ngIf="checkStatus(data.name) == 'stop'"></nz-badge>
+            </td>
+            <td>
+                <button nz-button nzType="default" nzShape="round" *ngIf="data.arranque == 'stop'"
+                    (click)="altExecute('start',data.name)"> <i nz-icon nzType="caret-right" nzTheme="outline"></i>
+                    Start</button>
+                <button nz-button nzType="default" nzShape="round" *ngIf="data.arranque == 'start'"
+                    (click)="altExecute('stop',data.name)" nzDanger> <i nz-icon nzType="pause" nzTheme="outline"></i>
+                    Stop</button>
+                <button nz-button nzType="default" nzShape="round" nzDanger [disabled]="data.arranque == null"
+                    *ngIf="data.arranque == null"> <i nz-icon nzType="pause" nzTheme="outline"></i>
+                    Stop</button>
+            </td>
+            <td>
+                <app-model-log [dataLog]="data"></app-model-log>
+            </td>
+            <td>
+                <app-modal-edit [dataUpdate1]="data"></app-modal-edit>
+            </td>
+            <td>
+                <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data)">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<div class="send-request ">
+    <button nz-button nzType="primary " [disabled]="setOfCheckedId.size===0 " [nzLoading]="loading "
+        (click)="sendRequest() ">
+        Delete Selected
+    </button>
+    <span>Selected {{ setOfCheckedId.size }} items</span>
+</div>

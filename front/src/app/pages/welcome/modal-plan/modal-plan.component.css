@@ -1,0 +1,11 @@
+nz-date-picker,
+nz-month-picker,
+nz-year-picker,
+nz-range-picker,
+nz-week-picker,
+nz-input-number,
+nz-select,
+p {
+    margin: 0 8px 1px 0;
+    line-height: 200%;
+}

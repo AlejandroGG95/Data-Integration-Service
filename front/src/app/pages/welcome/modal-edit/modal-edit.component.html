@@ -1,0 +1,29 @@
+<a (click)="showModal()">Edit</a>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Edit" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading">
+
+    <p optionalHelp="Model identifier for user">Name:</p>
+    <input nz-input placeholder="Name" style="width: 150px;" [(ngModel)]="name_job" [disabled]="true" />
+    <p optionalHelp="Model identifier for user">Description:</p>
+    <input nz-input placeholder="description" [(ngModel)]="description" />
+    <p optionalHelp="Model identifier for user">Created_date:</p>
+    <input nz-input placeholder="created_date" [(ngModel)]="created_date" [disabled]="true" />
+    <p optionalHelp="Model identifier for user">Modified_date:</p>
+    <input nz-input placeholder="modified_date" [(ngModel)]="modified_date" [disabled]="true" />
+
+    <!-- FORMULARIO -->
+    <hr>
+    <p>Configuration de interface</p>
+    <!------------------------------------KMeans------------------------------------>
+    <form nz-form labelWidth="200" style="display:flex; flex-direction: column;margin: 2%;">
+        <nz-form-item *ngFor="let variables of dataUpdate1.variables">
+            <label style="width: 100%;text-align: center;">{{variables.name}}</label>
+            <div style="width: 100%;" *ngFor="let item of variables.fields.field">
+                <nz-form-label style="width: 100%;text-align: left;">{{ item.variable_name }}</nz-form-label>
+                <input allowClear style="width: 100%;border-color:cornflowerblue;" [(ngModel)]="item.variable_value"
+                    [ngModelOptions]="{standalone: true}" />
+            </div>
+        </nz-form-item>
+    </form>
+</nz-modal>

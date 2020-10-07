@@ -1,0 +1,17 @@
+.inner-content {
+    background: #fff;
+    border-color: black;
+}
+
+[nz-button] {
+    margin-right: 8px;
+    margin-bottom: 12px;
+}
+
+.send-request {
+    margin-bottom: 16px;
+}
+
+.send-request span {
+    margin-left: 8px;
+}
